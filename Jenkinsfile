@@ -3,13 +3,13 @@ pipeline {
     environment {
         APP_NAME       = "ERPNext"
         BACKUP_DIR     = "/home/rajesh/neo_Touch_CRM/erp_backups"
-        DEPLOY_ENV     = "staging" 
+        DEPLOY_ENV     = "staging"  // change to "production" when ready
         GIT_REPO       = "https://github.com/rajeshrj-git/frappe_docker.git"
-        DB_CONTAINER   = "frappe_docker-db-1"
-        DB_NAME        = "_5e5899d8398b5f7b" 
-        DB_USER        = "root" 
-        DB_PASS        = "admin" 
-        COMPOSE_FILE   = "pwd.yml" 
+        DB_CONTAINER   = "frappe_docker_db_1"
+        DB_NAME        = "_5e5899d8398b5f7b" // replace if needed
+        DB_USER        = "root" // Consider using credentials('erpnext-db-user') 
+        DB_PASS        = "admin" // Consider using credentials('erpnext-db-pass')
+        COMPOSE_FILE   = "pwd.yml" // Fixed from pwd.yml
     }
     stages {
         stage('Checkout Code') {
@@ -126,7 +126,7 @@ pipeline {
                             echo "⏳ Waiting for containers to stabilize..."
                             sleep 20
                             
-                            echo "�� Container status:"
+                            echo "📊 Container status:"
                             docker compose -f ${COMPOSE_FILE} ps
                         """
                         echo "✅ Deployment completed successfully."
@@ -167,7 +167,7 @@ pipeline {
             }
         }
         
-        
+        // Comment out for production use - only for testing rollback functionality
         stage('Force Failure to Test Rollback') {
             when {
                 // Only run this in non-production environments
@@ -175,7 +175,7 @@ pipeline {
             }
             steps {
                 script {
-                    
+                    // Uncomment the line below to test rollback functionality
                     // error("Intentional failure to test rollback!")
                     echo "🧪 Rollback test stage - currently disabled. Uncomment to test rollback."
                 }
